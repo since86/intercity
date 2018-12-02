@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">                                      <!-- Bootstrap style -->
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=evyLcZfngeBAtLGaHLTnCXtYnDPO3yWL"></script>-->
+</head>
+<body>
+<div class="row">
+    <div class="tm-page-wrap mx-auto">
+    <div class="row tm-banner-row" id="tm-section-search">
+    <div class="form-row tm-search-form-row">
+    <div class="form-group tm-form-group tm-form-group-pad tm-form-group-3">
+        <label>出发地</label>
+        <input name="departure" type="text" value="" class="form-control" required id="startAddr" placeholder="上车地点">
+        <div id="searchResultPanel"  hidden=true ></div>
+    </div></div></div></div>
+</div>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/popper.min.js"></script>                    <!-- https://popper.js.org/ -->
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<script src="js/bootstrap-datetimepicker.fr.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=3.0&ak=evyLcZfngeBAtLGaHLTnCXtYnDPO3yWL&services=&t=20180522174630"></script>
+<script>
+    $(function () {
+        $('#startAddr').blur(function () {
+            if( $("searchResultPanel").innerHTML==''){
+
+            }
+        });
+    });
+
+    var map = new BMap.Map();
+    var moren = "";
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+        {"input" : "startAddr"});
+
+    ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+        console.log(e);
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+        }
+        var str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+            select.append("<option value=i++>value</option>");
+        }
+
+        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+        $("#selectId").append("<option value='"+str+"'>"+str+"</option>");
+        $("searchResultPanel").innerHTML = str;
+    });
+
+
+    var myValue;
+    var startCity;
+    ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+        console.log(e);
+        var _value = e.item.value;
+
+        myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+
+        startCity=_value.city+_value.district;
+        $("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+    });
+
+
+    var select = $("#slpk");
+    select.append("<option value='1'>香蕉</option>");
+    select.append("<option value='2'>苹果</option>");
+    select.append("<option value='3'>橘子</option>");
+    select.append("<option value='4'>石榴</option>");
+    select.append("<option value='5'>棒棒糖</option>");
+    select.append("<option value='6'>桃子</option>");
+    select.append("<option value='7'>陶子</option>");
+</script>
+</body>
+</html>
